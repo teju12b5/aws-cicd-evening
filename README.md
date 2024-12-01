@@ -1,2 +1,2 @@
-# aws-cicd-evening
-aws-cicd-morning
+# ci-cd-aws-evening
+ci-cd-aws-evening

@@ -97,3 +97,33 @@ sudo chmod -R 755 /home/ubuntu/nexus
 For Jfrog
 --------
 Plugin: Artifactory
+Plugin: Kubernetes
+
+
+# Installing eksctl
+#! /bin/bash
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+
+
+# Installing Kubectl
+#!/bin/bash
+sudo apt update
+sudo apt install curl -y
+sudo curl -LO "https://dl.k8s.io/release/v1.28.4/bin/linux/amd64/kubectl"
+sudo chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+
+eksctl create cluster \
+--name eks2 \
+--region us-east-1 \
+--version 1.31 \
+--nodegroup-name my-nodes \
+--node-type t2.medium \
+--managed --nodes 2 --nodes-min 1 --nodes-max 2 \
+--ssh-access \
+--ssh-public-key AWSHYD \
+--max-pods-per-node 110

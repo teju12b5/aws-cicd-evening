@@ -93,3 +93,7 @@ docker run -d \
 sudo chown -R 200:200 /home/ubuntu/nexus
 sudo chmod -R 755 /home/ubuntu/nexus
 
+
+For Jfrog
+--------
+Plugin: Artifactory

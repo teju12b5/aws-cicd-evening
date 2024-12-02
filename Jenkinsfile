@@ -85,5 +85,15 @@ pipeline {
                 }
             }   
         } 
+        stage('Build Docker Image and TAG') {
+            steps {
+                script {
+                    // Build the Docker image using the renamed JAR file
+                    script {
+                            sh 'docker build -t springboot:latest .'
+                   }
+                }   
+            }
+        }
      }
   }

@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'prod' , url: 'https://github.com/bkrrajmali/cicdtest.git'
+                git branch: 'prod' , url: 'https://github.com/bkrrajmali/aws-cicd-evening.git'
             }
         }
     }

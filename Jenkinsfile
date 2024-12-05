@@ -36,6 +36,15 @@ pipeline {
                sh 'trivy fs --format table --output trivy-fs-output.txt .'
             }
         } 
+        
+        stage('Quality Gate') {
+            steps {
+              timeout(time: 1, unit: 'MINUTES') {
+               waitForQualityGate abortPipeline: true, credentialsId: 'sonar'  
+          }
+        } 
+      }
+
             stage('Maven Package') {
             steps {
                echo 'Maven package Started'

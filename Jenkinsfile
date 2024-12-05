@@ -1,13 +1,25 @@
 def registry = 'https://trialkq9xw9.jfrog.io/'
 pipeline {
-        agent any
+    agent any
     tools {
         maven 'maven3'
+        jdk 'jdk17'
     }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+         }
+
         stages {
         stage('Git Checkout') {
             steps {
                 git branch: 'prod' , credentialsId: 'git-cred', url: 'https://github.com/teju12b5/aws-cicd-evening.git'
+            }
+        }
+        stage('Versioning') {
+            steps {
+                script {
+                sh 'mvn versions:set -DnewVersion=1.0.${BUILD_NUMBER}'
+                }
             }
         }
         stage('Maven Compile') {
@@ -22,22 +34,13 @@ pipeline {
                sh 'mvn test'
             }
         } 
-        stage('Sonar Analysis') {
-            steps {
-               withSonarQubeEnv('sonar') {
-                sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=SpringBootApp -Dsonar.projectKey=SpringBootApp \
-                                                       -Dsonar.java.binaries=. -Dsonar.exclusions=**/trivy-fs-output.txt '''
-               }
-            }
-        } 
-
         stage('File System Scan by Trivy') {
             steps {
                echo 'Trivy Scan Started'
                sh 'trivy fs --format table --output trivy-fs-output.txt .'
             }
         } 
-        stage('Sonar Analysis') {
+         stage('Sonar Analysis') {
             steps {
                withSonarQubeEnv('sonar') {
                 sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=SpringBootApp -Dsonar.projectKey=SpringBootApp \
@@ -52,14 +55,12 @@ pipeline {
           }
         } 
       }
-
-            stage('Maven Package') {
+       stage('Maven Package') {
             steps {
                echo 'Maven package Started'
                sh 'mvn package'
           }
-        }
-         
+        } 
          stage("Jar Publish") {
             steps {
                 script {

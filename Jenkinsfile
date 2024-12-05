@@ -2,12 +2,8 @@ pipeline {
     agent any
     tools {
         maven 'maven3'
-        jdk 'jdk17'
     }
-    environment {
-        SCANNER_HOME = tool 'sonar-scanner'
-         }
-    stages {
+        stages {
         stage('Git Checkout') {
             steps {
                 git branch: 'prod' , credentialsId: 'git-cred', url: 'https://github.com/teju12b5/aws-cicd-evening.git'
